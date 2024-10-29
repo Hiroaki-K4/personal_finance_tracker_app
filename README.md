@@ -3,7 +3,7 @@
 <br></br>
 
 ## Environment
-- Python 3.11
+- Python 3.9
 
 If you want to install python packages from requirements.txt, you have to run below command.
 
