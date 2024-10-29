@@ -17,6 +17,10 @@ def print_menu():
     print("11. Exit")
 
 
+def analyze_spending_by_category(df):
+    print("--- Total Spending by Category ---")
+    print(df.groupby("Category").sum())
+
 def main():
     # Import csv data
     df = pd.read_csv("sampledata.csv")
@@ -43,7 +47,7 @@ def main():
             print("5. Delete a Transaction")
         elif option == "6":
             # 6. Analyze Spending by Category
-            print("6. Analyze Spending by Category")
+            analyze_spending_by_category(df)
         elif option == "7":
             # 7. Calculate Average Monthly Spending
             print("7. Calculate Average Monthly Spending")
