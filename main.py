@@ -29,9 +29,21 @@ def main():
         if option == "1":
             # 1. View All Transactions
             print("1. View All Transactions")
+            print(df)
+
         elif option == "2":
             # 2. View Transactions by Date Range
             print("2. View Transactions by Date Range")
+            start_date = input("Enter start date YYYY-MM-DD : ")
+            end_date = input("Enter end date YYYY-MM-DD : ")
+            date_range = (df['date'] >= start_date) & (df['date'] <= end_date)
+            filtered_df = df.loc[date_range]
+
+            if not filtered_df.empty:
+                print(filtered_df)
+            else:
+                print("There is no transactions found in this date range.")
+
         elif option == "3":
             # 3. Add a Transaction
             print("3. Add a Transaction")
