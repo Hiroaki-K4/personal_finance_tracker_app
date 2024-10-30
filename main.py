@@ -19,7 +19,7 @@ def print_menu():
 
 def analyze_spending_by_category(df):
     print("--- Total Spending by Category ---")
-    print(df.groupby("Category").sum())
+    print(df.groupby("Category").sum()["Amount"].to_string())
 
 def main():
     # Import csv data
