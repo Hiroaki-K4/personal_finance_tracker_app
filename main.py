@@ -21,11 +21,9 @@ def show_top_spending_category(df):
     print("--- Top Spending Category ---")
     # Get expense data
     expense_df = df[df['Type'] == 'Expense']
-    # Groupby category and get sum
-    category_totals = expense_df.groupby('Category')['Amount'].sum()
-    # Get top value
-    top_spending_category = category_totals.sort_values(ascending=False).head(1)
-    print(top_spending_category["Category"])
+    # Groupby category and get total
+    totals = expense_df.groupby('Category')['Amount'].sum()
+    print("{0} with {1} total spending.".format(totals.idxmax(), totals.max()))
 
 
 def main():
