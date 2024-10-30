@@ -1,10 +1,6 @@
 import pandas as pd
 
 
-
-
-1
-
 def print_menu():
     print("=== Personal Finance Tracker ===")
     print("0. Import a CSV File")
