@@ -1,6 +1,9 @@
 import pandas as pd
 
 
+
+
+
 def print_menu():
     print("=== Personal Finance Tracker ===")
     print("0. Import a CSV File")
@@ -15,6 +18,16 @@ def print_menu():
     print("9. Visualize Monthly Spending Trend")
     print("10. Save Transactions to CSV")
     print("11. Exit")
+
+def delete_transactions(df):
+    delete_idx = int(input("Enter the index of the transaction to delete:"))
+    if 0 <= delete_idx < len(df):
+       delete_df = df.drop(delete_idx).reset_index(drop=True)
+       print("Transaction deleted successfully!")
+    else:
+        print("invalid input")
+
+
 
 
 def main():
@@ -39,7 +52,8 @@ def main():
             # 4. Edit a Transaction
             print("4. Edit a Transaction")
         elif option == "5":
-            # 5. Delete a Transaction
+            # 5. Delete a Transactions
+            df = delete_transactions(df)
             print("5. Delete a Transaction")
         elif option == "6":
             # 6. Analyze Spending by Category
