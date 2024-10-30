@@ -17,6 +17,14 @@ def print_menu():
     print("11. Exit")
 
 
+def analyze_spending_by_category(df):
+    print("--- Total Spending by Category ---")
+    # Get expense type data
+    expense_df = df[df["Type"] == "Expense"]
+    # Output total spending for each category
+    print(expense_df.groupby("Category")["Amount"].sum().to_string())
+
+
 def show_top_spending_category(df):
     print("--- Top Spending Category ---")
     # Get expense data
@@ -52,7 +60,7 @@ def main():
             print("5. Delete a Transaction")
         elif option == "6":
             # 6. Analyze Spending by Category
-            print("6. Analyze Spending by Category")
+            analyze_spending_by_category(df)
         elif option == "7":
             # 7. Calculate Average Monthly Spending
             print("7. Calculate Average Monthly Spending")
