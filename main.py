@@ -1,4 +1,5 @@
 import pandas as pd
+import matplotlib.pyplot as plt
 
 
 def print_menu():
@@ -51,6 +52,50 @@ def show_top_spending_category(df):
     print("{0} with {1} total spending.".format(totals.idxmax(), totals.max()))
 
 
+def visualize_monthly_spending_trend(df):
+    print("--- Visualize Monthly Spending Trend ---")
+    # Get expense data, using copy to avoid affecting original df
+    expense_df = df[df["Type"] == "Expense"].copy()
+    # Convert Date column to datetime format
+    expense_df["Date"] = pd.to_datetime(expense_df["Date"])
+    # Filter month and add column called as Month
+    expense_df["Month"] = expense_df["Date"].dt.to_period("M")
+    # Group by Month to sum the spending
+    monthly_spending = expense_df.groupby("Month")["Amount"].sum().reset_index()
+    # For plotting, have to convert month back to datetime
+    monthly_spending["Month"] = monthly_spending["Month"].dt.to_timestamp()
+
+
+    # Line chart : Monthly Spending
+    plt.plot(monthly_spending["Month"], monthly_spending["Amount"] , marker='o')
+    plt.title('Monthly Spending Trend')
+    plt.xlabel('Month')
+    plt.ylabel('Total Spending ($)')
+    plt.xticks(rotation=45)
+    plt.grid()
+    plt.show()
+
+    # Bar chart : Total Spending By Category
+    expense_df = df[df["Type"] == "Expense"]
+    total_spending = expense_df.groupby("Category")["Amount"].sum().sort_values(ascending=False)
+    total_spending.plot(kind='bar')
+
+    plt.title('Total Spending by Category', fontsize=16)
+    plt.xlabel('Category', fontsize=14)
+    plt.ylabel('Total Amount ($)', fontsize=14)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+    # Pie chart : Total Spending By Category
+    expense_df = df[df["Type"] == "Expense"]
+    total_spending = expense_df.groupby("Category")["Amount"].sum()
+    plt.pie(total_spending, labels=total_spending.index, autopct='%1.1f%%', startangle=140)
+    plt.title('Percentage Distribution of Spending by Category')
+    plt.axis('equal')
+    plt.show()
+
+
 def main():
     # Import csv data
     df = pd.read_csv("sampledata.csv")
@@ -87,7 +132,7 @@ def main():
             show_top_spending_category(df)
         elif option == "9":
             # 9. Visualize Monthly Spending Trend
-            print("9. Visualize Monthly Spending Trend")
+            visualize_monthly_spending_trend(df)
         elif option == "10":
             # 10. Save Transactions to CSV
             print("10. Save Transactions to CSV")
