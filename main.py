@@ -17,6 +17,23 @@ def print_menu():
     print("11. Exit")
 
 
+def calculate_average_monthly_spending(df):
+    print("--- Average Monthly Spending ---")
+    # Get expense type data
+    expense_df = df.loc[df["Type"] == "Expense"].copy()
+    # Convert Date column to datetime format
+    expense_df["Date"] = pd.to_datetime(expense_df["Date"])
+    # Add column called as Month
+    expense_df["Month"] = expense_df["Date"].dt.to_period("M")
+    # Get most recent month
+    most_recent_month = expense_df["Month"].max()
+    # Get most recent month's data
+    recent_month_data = expense_df[expense_df["Month"] == most_recent_month]
+    # Get average monthly spending(most recent month)
+    average_recent_month_spending = recent_month_data["Amount"].mean()
+    print(round(average_recent_month_spending, 2))
+
+
 def main():
     # Import csv data
     df = pd.read_csv("sampledata.csv")
@@ -46,7 +63,7 @@ def main():
             print("6. Analyze Spending by Category")
         elif option == "7":
             # 7. Calculate Average Monthly Spending
-            print("7. Calculate Average Monthly Spending")
+            calculate_average_monthly_spending(df)
         elif option == "8":
             # 8. Show Top Spending Category
             print("8. Show Top Spending Category")
