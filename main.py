@@ -18,8 +18,6 @@ def print_menu():
 
 
 def view_transactions_by_date_range(df):
-    print("2. View Transactions by Date Range")
-
     while True:
         start_date = input("Enter start date (YYYY-MM-DD): ")
         end_date = input("Enter end date (YYYY-MM-DD): ")
@@ -57,7 +55,6 @@ def main():
         print()
         if option == "1":
             # 1. View All Transactions
-            print("1. View All Transactions")
             print(df)
 
         elif option == "2":
