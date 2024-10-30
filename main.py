@@ -3,6 +3,7 @@ import pandas as pd
 
 
 
+1
 
 def print_menu():
     print("=== Personal Finance Tracker ===")
@@ -20,16 +21,17 @@ def print_menu():
     print("11. Exit")
 
 def delete_transactions(df):
-    delete_idx = int(input("Enter the index of the transaction to delete:"))
-    if 0 <= delete_idx < len(df):
-       delete_df = df.drop(delete_idx).reset_index(drop=True)
-       print("Transaction deleted successfully!")
+    delete_idx = input("Enter the index of the transaction to delete:")
+    if delete_idx.isdigit():
+        delete_idx = int(delete_idx)
+        if 0 <= int(delete_idx) < len(df):
+            delete_df = df.drop(delete_idx).reset_index(drop=True)
+            print("Transaction deleted successfully!")
+            return delete_df
     else:
         print("invalid input")
-
-
-
-
+        return df
+    
 def main():
     # Import csv data
     df = pd.read_csv("sampledata.csv")
@@ -54,7 +56,6 @@ def main():
         elif option == "5":
             # 5. Delete a Transactions
             df = delete_transactions(df)
-            print("5. Delete a Transaction")
         elif option == "6":
             # 6. Analyze Spending by Category
             print("6. Analyze Spending by Category")
