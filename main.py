@@ -17,6 +17,7 @@ def print_menu():
     print("11. Exit")
 
 
+
 def view_transactions_by_date_range(df):
     while True:
         start_date = input("Enter start date (YYYY-MM-DD): ")
@@ -42,6 +43,40 @@ def view_transactions_by_date_range(df):
         else:
             print("There are no transactions found in this date range.")
         break
+
+def analyze_spending_by_category(df):
+    print("--- Total Spending by Category ---")
+    # Get expense type data
+    expense_df = df[df["Type"] == "Expense"]
+    # Output total spending for each category
+    print(expense_df.groupby("Category")["Amount"].sum().to_string())
+
+
+def calculate_average_monthly_spending(df):
+    print("--- Average Monthly Spending ---")
+    # Get expense type data
+    expense_df = df.loc[df["Type"] == "Expense"].copy()
+    # Convert Date column to datetime format
+    expense_df["Date"] = pd.to_datetime(expense_df["Date"])
+    # Add column called as Month
+    expense_df["Month"] = expense_df["Date"].dt.to_period("M")
+    # Get most recent month
+    most_recent_month = expense_df["Month"].max()
+    # Get most recent month's data
+    recent_month_data = expense_df[expense_df["Month"] == most_recent_month]
+    # Get average monthly spending(most recent month)
+    average_recent_month_spending = recent_month_data["Amount"].mean()
+    print(round(average_recent_month_spending, 2))
+
+
+def show_top_spending_category(df):
+    print("--- Top Spending Category ---")
+    # Get expense data
+    expense_df = df[df["Type"] == "Expense"]
+    # Groupby category and get total
+    totals = expense_df.groupby("Category")["Amount"].sum()
+    print("{0} with {1} total spending.".format(totals.idxmax(), totals.max()))
+
 
 
 def main():
@@ -72,13 +107,14 @@ def main():
             print("5. Delete a Transaction")
         elif option == "6":
             # 6. Analyze Spending by Category
-            print("6. Analyze Spending by Category")
+            analyze_spending_by_category(df)
         elif option == "7":
             # 7. Calculate Average Monthly Spending
-            print("7. Calculate Average Monthly Spending")
+            calculate_average_monthly_spending(df)
         elif option == "8":
             # 8. Show Top Spending Category
             print("8. Show Top Spending Category")
+            show_top_spending_category(df)
         elif option == "9":
             # 9. Visualize Monthly Spending Trend
             print("9. Visualize Monthly Spending Trend")
