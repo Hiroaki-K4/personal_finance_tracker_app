@@ -17,6 +17,22 @@ def print_menu():
     print("11. Exit")
 
 
+def delete_transactions(df):
+    delete_idx = input("Enter the index of the transaction to delete:")
+    if delete_idx.isdigit():
+        delete_idx = int(delete_idx)
+        if 0 <= int(delete_idx) < len(df):
+            delete_df = df.drop(delete_idx).reset_index(drop=True)
+            print("Transaction deleted successfully!")
+            return delete_df
+        else:
+            print("Please enter valid input!")
+            return df
+    else:
+        print("invalid input")
+        return df
+    
+
 
 def view_transactions_by_date_range(df):
     while True:
@@ -79,6 +95,7 @@ def show_top_spending_category(df):
 
 
 
+
 def main():
     # Import csv data
     df = pd.read_csv("sampledata.csv")
@@ -103,8 +120,8 @@ def main():
             # 4. Edit a Transaction
             print("4. Edit a Transaction")
         elif option == "5":
-            # 5. Delete a Transaction
-            print("5. Delete a Transaction")
+            # 5. Delete a Transactions
+            df = delete_transactions(df)
         elif option == "6":
             # 6. Analyze Spending by Category
             analyze_spending_by_category(df)
