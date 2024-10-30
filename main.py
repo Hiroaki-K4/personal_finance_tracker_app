@@ -20,7 +20,7 @@ def print_menu():
 def analyze_spending_by_category(df):
     print("--- Total Spending by Category ---")
     # Get expense type data
-    expense_df = df[df['Type'] == 'Expense']
+    expense_df = df[df["Type"] == "Expense"]
     # Output total spending for each category
     print(expense_df.groupby("Category")["Amount"].sum().to_string())
 
