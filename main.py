@@ -28,6 +28,9 @@ def delete_transactions(df):
             delete_df = df.drop(delete_idx).reset_index(drop=True)
             print("Transaction deleted successfully!")
             return delete_df
+        else:
+            print("Please enter valid input!")
+            return df
     else:
         print("invalid input")
         return df
