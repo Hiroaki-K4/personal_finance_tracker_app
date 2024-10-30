@@ -47,8 +47,6 @@ def add_transaction(df):
     print(f"Date: {date}, Category: {category}, Description: {description}, Amount: {amount}, Type: {transaction_type}")
     print("Transaction added successfully!")
 
-    df.to_csv("sampledata.csv", index=False) # Save updated DataFrame back to CSV
-
     return df  # Return the updated DataFrame
 
 df = add_transaction(df) # call function collecting user inputs n appends to the original df

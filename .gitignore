@@ -1,3 +1,2 @@
-nano .gitignore
-echo ".idea/" >> .gitignore
-echo ".venv/" >> .gitignore
+.idea/
+.venv/

@@ -3,6 +3,7 @@ import pandas as pd
 
 df = pd.read_csv("sampledata.csv")
 
+# filtering transactions by date and bringing all indexes from the input date
 def filter_transactions_by_date(df):
     while True:
         date_input = input("Enter the date to filter transactions (YYYY-MM-DD): ")
@@ -81,9 +82,9 @@ def edit_transaction(df):
     elif type_input:
         print("Invalid type. Keeping current type.")
 
-    # Displays the updated transaction and saved in CSV
+
     print("Transaction updated successfully!")
-    df.to_csv("sampledata.csv", index=False)
+
     return df
 
 df = edit_transaction(df)
