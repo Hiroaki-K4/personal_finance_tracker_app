@@ -1,5 +1,5 @@
 import pandas as pd
-
+from datetime import datetime
 
 def print_menu():
     print("=== Personal Finance Tracker ===")
@@ -15,6 +15,35 @@ def print_menu():
     print("9. Visualize Monthly Spending Trend")
     print("10. Save Transactions to CSV")
     print("11. Exit")
+
+
+def view_transactions_by_date_range(df):
+    print("2. View Transactions by Date Range")
+
+    while True:
+        start_date = input("Enter start date (YYYY-MM-DD): ")
+        end_date = input("Enter end date (YYYY-MM-DD): ")
+
+        # Validate date format
+        try:
+            start_date_dt = datetime.strptime(start_date, "%Y-%m-%d")
+            end_date_dt = datetime.strptime(end_date, "%Y-%m-%d")
+            if start_date_dt > end_date_dt:
+                print("Start date must be before or equal to end date. Please try again.")
+                continue
+        except ValueError:
+            print("Invalid date format. Please use YYYY-MM-DD.")
+            continue
+
+        # Filter DataFrame
+        date_range = (df['date'] >= start_date) & (df['date'] <= end_date)
+        filtered_df = df.loc[date_range]
+
+        if not filtered_df.empty:
+            print(filtered_df)
+        else:
+            print("There are no transactions found in this date range.")
+        break  # Exit the loop after successful execution
 
 
 def main():
@@ -33,16 +62,7 @@ def main():
 
         elif option == "2":
             # 2. View Transactions by Date Range
-            print("2. View Transactions by Date Range")
-            start_date = input("Enter start date YYYY-MM-DD : ")
-            end_date = input("Enter end date YYYY-MM-DD : ")
-            date_range = (df['date'] >= start_date) & (df['date'] <= end_date)
-            filtered_df = df.loc[date_range]
-
-            if not filtered_df.empty:
-                print(filtered_df)
-            else:
-                print("There is no transactions found in this date range.")
+            view_transactions_by_date_range(df)
 
         elif option == "3":
             # 3. Add a Transaction
