@@ -36,14 +36,14 @@ def view_transactions_by_date_range(df):
             continue
 
         # Filter DataFrame
-        date_range = (df['date'] >= start_date) & (df['date'] <= end_date)
+        date_range = (df['Date'] >= start_date) & (df['Date'] <= end_date)
         filtered_df = df.loc[date_range]
 
         if not filtered_df.empty:
             print(filtered_df)
         else:
             print("There are no transactions found in this date range.")
-        break  # Exit the loop after successful execution
+        break
 
 
 def main():
