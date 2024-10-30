@@ -17,6 +17,17 @@ def print_menu():
     print("11. Exit")
 
 
+def show_top_spending_category(df):
+    print("--- Top Spending Category ---")
+    # Get expense data
+    expense_df = df[df['Type'] == 'Expense']
+    # Groupby category and get sum
+    category_totals = expense_df.groupby('Category')['Amount'].sum()
+    # Get top value
+    top_spending_category = category_totals.sort_values(ascending=False).head(1)
+    print(top_spending_category["Category"])
+
+
 def main():
     # Import csv data
     df = pd.read_csv("sampledata.csv")
@@ -50,6 +61,7 @@ def main():
         elif option == "8":
             # 8. Show Top Spending Category
             print("8. Show Top Spending Category")
+            show_top_spending_category(df)
         elif option == "9":
             # 9. Visualize Monthly Spending Trend
             print("9. Visualize Monthly Spending Trend")
