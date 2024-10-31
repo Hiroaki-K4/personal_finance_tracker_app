@@ -1,6 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-
+import matplotlib.dates as mdates
 
 def print_menu():
     print("=== Personal Finance Tracker ===")
@@ -71,6 +71,9 @@ def visualize_monthly_spending_trend(df):
     plt.title('Monthly Spending Trend')
     plt.xlabel('Month')
     plt.ylabel('Total Spending ($)')
+    # Set the x-axis ticks to show only year and month
+    plt.gca().xaxis.set_major_locator(mdates.MonthLocator())  # Set major ticks to each month
+    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))  # Format ticks
     plt.xticks(rotation=45)
     plt.grid()
     plt.show()
