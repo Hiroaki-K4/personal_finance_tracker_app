@@ -1,7 +1,18 @@
-import pandas as pd
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from datetime import datetime
+from data_analysis import (
+    analyze_spending_by_category,
+    calculate_average_monthly_spending,
+    show_top_spending_category,
+)
+from data_management import (
+    add_transaction,
+    delete_transactions,
+    edit_transaction,
+    import_csv_file,
+    save_transactions_to_csv,
+    view_transactions_by_date_range,
+)
+from visualization import visualize_monthly_spending_trend
+
 
 def print_menu():
     print("=== Personal Finance Tracker ===")
@@ -19,135 +30,9 @@ def print_menu():
     print("11. Exit")
 
 
-def delete_transactions(df):
-    delete_idx = input("Enter the index of the transaction to delete:")
-    if delete_idx.isdigit():
-        delete_idx = int(delete_idx)
-        if 0 <= int(delete_idx) < len(df):
-            delete_df = df.drop(delete_idx).reset_index(drop=True)
-            print("Transaction deleted successfully!")
-            return delete_df
-        else:
-            print("Please enter valid input!")
-            return df
-    else:
-        print("invalid input")
-        return df
-    
-
-
-def view_transactions_by_date_range(df):
-    while True:
-        start_date = input("Enter start date (YYYY-MM-DD): ")
-        end_date = input("Enter end date (YYYY-MM-DD): ")
-
-        # Validate date format
-        try:
-            start_date_dt = datetime.strptime(start_date, "%Y-%m-%d")
-            end_date_dt = datetime.strptime(end_date, "%Y-%m-%d")
-            if start_date_dt > end_date_dt:
-                print("Start date must be before or equal to end date. Please try again.")
-                continue
-        except ValueError:
-            print("Invalid date format. Please use YYYY-MM-DD.")
-            continue
-
-        # Filter DataFrame
-        date_range = (df['Date'] >= start_date) & (df['Date'] <= end_date)
-        filtered_df = df.loc[date_range]
-
-        if not filtered_df.empty:
-            print(filtered_df)
-        else:
-            print("There are no transactions found in this date range.")
-        break
-
-def analyze_spending_by_category(df):
-    print("--- Total Spending by Category ---")
-    # Get expense type data
-    expense_df = df[df["Type"] == "Expense"]
-    # Output total spending for each category
-    print(expense_df.groupby("Category")["Amount"].sum().to_string())
-
-
-def calculate_average_monthly_spending(df):
-    print("--- Average Monthly Spending ---")
-    # Get expense type data
-    expense_df = df.loc[df["Type"] == "Expense"].copy()
-    # Convert Date column to datetime format
-    expense_df["Date"] = pd.to_datetime(expense_df["Date"])
-    # Add column called as Month
-    expense_df["Month"] = expense_df["Date"].dt.to_period("M")
-    # Get most recent month
-    most_recent_month = expense_df["Month"].max()
-    # Get most recent month's data
-    recent_month_data = expense_df[expense_df["Month"] == most_recent_month]
-    # Get average monthly spending(most recent month)
-    average_recent_month_spending = recent_month_data["Amount"].mean()
-    print(round(average_recent_month_spending, 2))
-
-
-def show_top_spending_category(df):
-    print("--- Top Spending Category ---")
-    # Get expense data
-    expense_df = df[df["Type"] == "Expense"]
-    # Groupby category and get total
-    totals = expense_df.groupby("Category")["Amount"].sum()
-    print("{0} with {1} total spending.".format(totals.idxmax(), totals.max()))
-
-
-
-def visualize_monthly_spending_trend(df):
-    print("--- Visualize Monthly Spending Trend ---")
-    # Get expense data, using copy to avoid affecting original df
-    expense_df = df[df["Type"] == "Expense"].copy()
-    # Convert Date column to datetime format
-    expense_df["Date"] = pd.to_datetime(expense_df["Date"])
-    # Filter month and add column called as Month
-    expense_df["Month"] = expense_df["Date"].dt.to_period("M")
-    # Group by Month to sum the spending
-    monthly_spending = expense_df.groupby("Month")["Amount"].sum().reset_index()
-    # For plotting, have to convert month back to datetime
-    monthly_spending["Month"] = monthly_spending["Month"].dt.to_timestamp()
-
-
-    # Line chart : Monthly Spending
-    plt.plot(monthly_spending["Month"], monthly_spending["Amount"] , marker='o')
-    plt.title('Monthly Spending Trend')
-    plt.xlabel('Month')
-    plt.ylabel('Total Spending ($)')
-    # Set the x-axis ticks to show only year and month
-    plt.gca().xaxis.set_major_locator(mdates.MonthLocator())  # Set major ticks to each month
-    plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m'))  # Format ticks
-    plt.xticks(rotation=45)
-    plt.grid()
-    plt.show()
-
-    # Bar chart : Total Spending By Category
-    expense_df = df[df["Type"] == "Expense"]
-    total_spending = expense_df.groupby("Category")["Amount"].sum().sort_values(ascending=False)
-    total_spending.plot(kind='bar')
-
-    plt.title('Total Spending by Category', fontsize=16)
-    plt.xlabel('Category', fontsize=14)
-    plt.ylabel('Total Amount ($)', fontsize=14)
-    plt.xticks(rotation=45)
-    plt.tight_layout()
-    plt.show()
-
-    # Pie chart : Total Spending By Category
-    expense_df = df[df["Type"] == "Expense"]
-    total_spending = expense_df.groupby("Category")["Amount"].sum()
-    plt.pie(total_spending, labels=total_spending.index, autopct='%1.1f%%', startangle=140)
-    plt.title('Percentage Distribution of Spending by Category')
-    plt.axis('equal')
-    plt.show()
-
-
-
 def main():
     # Import csv data
-    df = pd.read_csv("sampledata.csv")
+    df = import_csv_file("sampledata.csv")
 
     # Application loop
     while True:
@@ -157,17 +42,15 @@ def main():
         if option == "1":
             # 1. View All Transactions
             print(df)
-
         elif option == "2":
             # 2. View Transactions by Date Range
             view_transactions_by_date_range(df)
-
         elif option == "3":
             # 3. Add a Transaction
-            print("3. Add a Transaction")
+            df = add_transaction(df)
         elif option == "4":
             # 4. Edit a Transaction
-            print("4. Edit a Transaction")
+            df = edit_transaction(df)
         elif option == "5":
             # 5. Delete a Transactions
             df = delete_transactions(df)
@@ -179,14 +62,13 @@ def main():
             calculate_average_monthly_spending(df)
         elif option == "8":
             # 8. Show Top Spending Category
-            print("8. Show Top Spending Category")
             show_top_spending_category(df)
         elif option == "9":
             # 9. Visualize Monthly Spending Trend
             visualize_monthly_spending_trend(df)
         elif option == "10":
             # 10. Save Transactions to CSV
-            print("10. Save Transactions to CSV")
+            save_transactions_to_csv(df)
         elif option == "11":
             print("Exiting the Personal Finance Tracker. Goodbye!")
             break
