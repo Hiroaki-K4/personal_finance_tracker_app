@@ -26,6 +26,7 @@ def view_transactions_by_date_range(df):
             continue
 
         # Filter DataFrame
+        df["Date"] = df["Date"].fillna("").astype(str)
         date_range = (df["Date"] >= start_date) & (df["Date"] <= end_date)
         filtered_df = df.loc[date_range]
 
@@ -102,7 +103,7 @@ def filter_transactions_by_date(df):
             print("Invalid date format! Please enter the date in YYYY-MM-DD format.")
 
     # Filter the DataFrame from specific date
-    # df["Date"] = df["Date"].fillna("").astype(str)
+    df["Date"] = df["Date"].fillna("").astype(str)
     filtered_df = df[df["Date"].str.startswith(date_input)]
 
     if filtered_df.empty:
