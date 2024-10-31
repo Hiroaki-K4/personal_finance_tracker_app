@@ -13,6 +13,10 @@ collaboration and version control.
 ## Environment
 - Python 3.9
 
+<br></br>
+
+## How to run
+
 If you want to install python packages from requirements.txt, you have to run below command.
 
 ```bash
@@ -23,4 +27,10 @@ If you add a new package, you have to update requirements.txt.
 
 ```bash
 pip freeze > requirements.txt
+```
+
+If you want to run this program, please run below command.
+
+```bash
+python3 main.py
 ```
